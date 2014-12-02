@@ -3,17 +3,29 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives | albert&#39;s blog</title>
+  <title>albert&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="too young too simple sometimes naive">
-<meta property="og:type" content="website">
+  <meta name="description" content="zepto1.1.4 内部分析
+Core module
+Zepto部分 通用变量定义
+逐行分析代码如下
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787">
+<meta property="og:type" content="article">
 <meta property="og:title" content="albert's blog">
-<meta property="og:url" content="http://www.fenghongyu.com/archives/">
+<meta property="og:url" content="http://www.fenghongyu.com/2014/12/01/zepto1.1.4-Zepto-common-var/">
 <meta property="og:site_name" content="albert's blog">
-<meta property="og:description" content="too young too simple sometimes naive">
+<meta property="og:description" content="zepto1.1.4 内部分析
+Core module
+Zepto部分 通用变量定义
+逐行分析代码如下
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="albert's blog">
-<meta name="twitter:description" content="too young too simple sometimes naive">
+<meta name="twitter:description" content="zepto1.1.4 内部分析
+Core module
+Zepto部分 通用变量定义
+逐行分析代码如下
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787">
 
   
     <link rel="alternative" href="/atom.xml" title="albert&#39;s blog" type="application/atom+xml">
@@ -63,39 +75,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-zepto1.1.4-Zepto-commonfunc" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/12/02/zepto1.1.4-Zepto-commonfunc/" class="article-date">
-  <time datetime="2014-12-02T12:24:31.000Z" itemprop="datePublished">12月 2 2014</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="zepto1-1-4_内部分析">zepto1.1.4 内部分析</h1>
-<h3 id="Core_module">Core module</h3>
-<p><strong>Zepto部分 通用变量定义</strong></p>
-<p>逐行分析代码如下</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">	</div></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.fenghongyu.com/2014/12/02/zepto1.1.4-Zepto-commonfunc/" data-id="kv6wiomx134ffbyb" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-zepto1.1.4-Zepto-common-var" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-zepto1.1.4-Zepto-common-var" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2014/12/01/zepto1.1.4-Zepto-common-var/" class="article-date">
   <time datetime="2014-12-01T03:44:40.000Z" itemprop="datePublished">12月 1 2014</time>
@@ -121,46 +101,29 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-zepto1.1.4" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/11/25/zepto1.1.4/" class="article-date">
-  <time datetime="2014-11-25T07:59:13.000Z" itemprop="datePublished">11月 25 2014</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="zepto1-1-4_内部分析">zepto1.1.4 内部分析</h1>
-<h3 id="Core_module">Core module</h3>
-<p>zepto核心模块为Zepto，主体结构类似jquery</p>
-<p>打开代码首先我们看到的是如下结构</p>
-<h4 id="代码结构">代码结构</h4>
-<p><strong>Zepto部分</strong></p>
-<p>$ -&gt; init -&gt; Z<br>$为zepto的入口，其实仅仅是init函数的别名，init才是真正的入口,init函数中判断了各种分支，再<br>根据传入参数进行fragment、qsa等不用处理，最后使用Z，将得到的node封装成类数组。</p>
-<p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">	<span class="keyword">var</span> Zepto = (<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span></div><div class="line">		<span class="comment">//此处定义通用的方法及正则，如filter=[].filter;</span></div><div class="line">		<span class="comment">//定义类型判断函数</span></div><div class="line">		</div><div class="line">		zepto.fragment = <span class="function"><span class="keyword">function</span><span class="params">(html, name, properties)</span> {</span></div><div class="line">		<span class="comment">//该方法可被zepto plugin重写，用于将一段html string片段生成对应的dom节点</span></div><div class="line">		<span class="comment">//若传了参数properties，该方法还会为dom添加对应属性</span></div><div class="line">		}</div><div class="line"></div><div class="line">		zepto.Z = <span class="function"><span class="keyword">function</span><span class="params">(dom, selector)</span> {</span></div><div class="line">		<span class="comment">//该方法可将dom array的prototype指向$.fn</span></div><div class="line">		<span class="comment">//实际为zepto对象函数</span></div><div class="line">		<span class="comment">//返回一个zepto对象</span></div><div class="line">			<span class="keyword">return</span> dom</div><div class="line">		}</div><div class="line">		</div><div class="line">		zepto.isZ = <span class="function"><span class="keyword">function</span><span class="params">(object)</span> {</span></div><div class="line">		<span class="comment">//这里返回object是否是zepto.Z的一个实例</span></div><div class="line">			<span class="keyword">return</span> object <span class="keyword">instanceof</span> zepto.Z</div><div class="line">		}</div><div class="line"></div><div class="line">		zepto.qsa = <span class="function"><span class="keyword">function</span><span class="params">(element, selector)</span> {</span></div><div class="line">		<span class="comment">/*zepto的CSS选择器实现，使用document.querySelectorAll，并对某些特例做了优化，如id选择器使用了getElementById*/</span></div><div class="line">		}</div><div class="line"></div><div class="line">		zepto.init = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span> {</span></div><div class="line">		<span class="comment">//该方法与jquery的$.fn.init类似，同为入口函数</span></div><div class="line">		<span class="comment">//方法内部判断一系列选择器的情况，如html string、function、dom等</span></div><div class="line">			<span class="keyword">return</span> zepto.Z(dom, selector)</div><div class="line">		}</div><div class="line"></div><div class="line">		<span class="comment">/*这就是zepto的入口啦, 返回init这个选择器的入口，创建zepto集合*/</span></div><div class="line">	  	$ = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span>{</span></div><div class="line">			<span class="keyword">return</span> zepto.init(selector, context)</div><div class="line">	  	}</div><div class="line">		<span class="comment">/*由于zepto.Z的返回值对象，也就是zepto实例的prototype指向$.fn，</span></div><div class="line">		  但是zepto.Z.prototype还未改变，所以将其prototype也指向$.fn</div><div class="line">		*/</div><div class="line">	  	zepto.Z.prototype = $.fn</div><div class="line">	})()</div><div class="line"></div><div class="line">	<span class="comment">//如果'$'没有被定义，就把它赋值为zepto</span></div><div class="line">	<span class="comment">//所以$就是Zepto的简写</span></div><div class="line">	window.Zepto = Zepto</div><div class="line">	window.$ === <span class="literal">undefined</span> && (window.$ = Zepto)</div></pre></td></tr></table></figure><br><strong>Zepto 入口的使用</strong></p>
-<p><img src="/images/zepto/constructor.png" alt="zepto 构造函数"></p>
+    <a href="/2014/12/02/zepto1.1.4-Zepto-commonfunc/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/11/25/zepto1.1.4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.fenghongyu.com/2014/11/25/zepto1.1.4/" data-id="80hemtpigvv8afsd" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
 
-
-  
-  
 </section>
         
           <aside id="sidebar">
