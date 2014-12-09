@@ -65,6 +65,94 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-zepto1.1.4-Zepto-fn-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/04/zepto1.1.4-Zepto-fn-1/" class="article-date">
+  <time datetime="2014-12-04T06:54:21.000Z" itemprop="datePublished">12月 4 2014</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/04/zepto1.1.4-Zepto-fn-1/">zepto1.1.4源码分析 zepto部分 fn</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="zepto1-1-4_内部分析">zepto1.1.4 内部分析</h1>
+<h3 id="Core_module">Core module</h3>
+<p><strong>Zepto部分 fn</strong><br><em>$.trim去掉字符串开头和结尾的空白符</em></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 去掉字符串开头和结尾的空白符</div><div class="line"> * @param  str 字符串</div><div class="line"> */</div><div class="line">$.trim = <span class="function"><span class="keyword">function</span><span class="params">(str)</span> {</span></div><div class="line">	<span class="comment">//str == null则返回空字符串</span></div><div class="line">	<span class="comment">//如果str有值，使用String原生的trim</span></div><div class="line">	<span class="keyword">return</span> str == <span class="literal">null</span> ? <span class="string">""</span> : <span class="built_in">String</span>.prototype.trim.call(str)</div><div class="line">}</div></pre></td></tr></table></figure><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">_$.type 返回对象的toString类型，如果不在枚举类型中，则返回object，$.type其实使用的是<span class="built_in">Object</span>.prototype.toString_</div><div class="line"><span class="comment">//返回要判断的对象类型</span></div><div class="line">$.type = type</div><div class="line"><span class="comment">//传入待判断对象，如果为null,则转换为字符串型"null"，toString是Object.prototype.toString，ECMAScript规定，当调用它时，会获取this对象的[[class]]属性([[class]]为内置属性)，然后拼成[object class]的这种形式返回，如果不在class2type中，则返回"object"</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">type</span><span class="params">(obj)</span> {</span></div><div class="line">	<span class="keyword">return</span> obj == <span class="literal">null</span> ? <span class="built_in">String</span>(obj) :</div><div class="line">	class2type[toString.call(obj)] || <span class="string">"object"</span></div><div class="line">}</div><div class="line"><span class="comment">//class2type的对象枚举，将以下类型转换成数组</span></div><div class="line"><span class="comment">//使用each遍历,对应到class2type的对象中，对象名如[object String]等</span></div><div class="line">$.each(<span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span>.split(<span class="string">" "</span>), <span class="function"><span class="keyword">function</span><span class="params">(i, name)</span> {</span></div><div class="line">	class2type[ <span class="string">"[object "</span> + name + <span class="string">"]"</span> ] = name.toLowerCase()</div><div class="line">})</div></pre></td></tr></table></figure><br><em>$.contains检查父节点是否包含第二个参数中的DOM节点(注意两个参数必须都为dom节点)。若两者为同一个元素也返回false</em><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//看看当前浏览器是否有contains这个方法</span></div><div class="line"><span class="comment">//有原生的，使用原生contains方法</span></div><div class="line">$.contains = document.documentElement.contains ?</div><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(parent, node)</span> {</span></div><div class="line">  <span class="keyword">return</span> parent !== node && parent.contains(node)</div><div class="line">} :</div><div class="line"><span class="comment">//没有原生方法时，使用如下方法</span></div><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(parent, node)</span> {</span></div><div class="line">  <span class="comment">//循环查找node的父元素，并与传入的parent比较，直到退出循环</span></div><div class="line">  <span class="keyword">while</span> (node && (node = node.parentNode))</div><div class="line">    <span class="keyword">if</span> (node === parent) <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">  <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">}</div></pre></td></tr></table></figure><br><em>$.map遍历传入的对象或类数组，对每个item执行回调，并返回一个执行后的新数组</em><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * @param  elements [可以是数组、对象、类数组]</div><div class="line"> * @param  {Function} callback [description]</div><div class="line"> * @return array           [返回一个新数组]</div><div class="line"> */</div><div class="line">$.map = <span class="function"><span class="keyword">function</span><span class="params">(elements, callback)</span>{</span></div><div class="line">	<span class="keyword">var</span> value, values = [], i, key</div><div class="line">	<span class="comment">//elements(传入的第一个参数)如果为类数组</span></div><div class="line">	<span class="keyword">if</span> (likeArray(elements))</div><div class="line">	<span class="comment">//循环取每一个元素，传入callback</span></div><div class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; elements.length; i++) {</div><div class="line">		value = callback(elements[i], i)</div><div class="line">		<span class="comment">//如果有返回值，则放入提前定义好的数组中。</span></div><div class="line">		<span class="keyword">if</span> (value != <span class="literal">null</span>) values.push(value)</div><div class="line">	}</div><div class="line">	<span class="keyword">else</span></div><div class="line">		<span class="comment">//如果是其他的如Object或者Array类型使用for...in</span></div><div class="line">		<span class="keyword">for</span> (key <span class="keyword">in</span> elements) {</div><div class="line">		value = callback(elements[key], key)</div><div class="line">		<span class="keyword">if</span> (value != <span class="literal">null</span>) values.push(value)</div><div class="line">	}</div><div class="line">	<span class="comment">//返回一个新的数组</span></div><div class="line">	<span class="keyword">return</span> flatten(values)</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p><em>$.each遍历数组中每个对象或者类数组， 当遍历函数返回false时，遍历停止返回当前的对象</em></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$.each = <span class="function"><span class="keyword">function</span><span class="params">(elements, callback)</span>{</span></div><div class="line">	<span class="keyword">var</span> i, key</div><div class="line">	<span class="keyword">if</span> (likeArray(elements)) {</div><div class="line">		<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; elements.length; i++)</div><div class="line">			<span class="keyword">if</span> (callback.call(elements[i], i, elements[i]) === <span class="literal">false</span>) <span class="keyword">return</span> elements</div><div class="line">	} <span class="keyword">else</span> {</div><div class="line">		<span class="keyword">for</span> (key <span class="keyword">in</span> elements)</div><div class="line">			<span class="keyword">if</span> (callback.call(elements[key], key, elements[key]) === <span class="literal">false</span>) <span class="keyword">return</span> elements</div><div class="line">	}</div><div class="line"></div><div class="line">	<span class="keyword">return</span> elements</div><div class="line">}</div></pre></td></tr></table></figure><br><em>$.grep为filter的一个别名</em><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$.grep = <span class="function"><span class="keyword">function</span><span class="params">(elements, callback)</span>{</span></div><div class="line">	<span class="keyword">return</span> filter.call(elements, callback)</div><div class="line">}</div></pre></td></tr></table></figure><br><em>$.parseJSON将 JavaScript 对象表示法 (JSON) 字符串转换为对象</em><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//如果有原生JSON方法，则使用原生</span></div><div class="line"><span class="keyword">if</span> (window.JSON) $.parseJSON = <span class="built_in">JSON</span>.parse</div></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.fenghongyu.com/2014/12/04/zepto1.1.4-Zepto-fn-1/" data-id="ac28j9utzd1ipdgz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zepto/">zepto</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-zepto1.1.4-Zepto-fn" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/03/zepto1.1.4-Zepto-fn/" class="article-date">
+  <time datetime="2014-12-03T03:34:08.000Z" itemprop="datePublished">12月 3 2014</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/03/zepto1.1.4-Zepto-fn/">zepto1.1.4源码分析 zepto部分 fn</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="zepto1-1-4_内部分析">zepto1.1.4 内部分析</h1>
+<h3 id="Core_module">Core module</h3>
+<p><strong>Zepto部分 fn</strong><br><em>extend</em><br>这里首先要说一下extend，extend有两种一种是underscore的extend复制，一种是深复制要说明两种复制的关系，就要从javascript值类型说起：基本类型和引用类型五种基本类型说起Undifined、Null、Boolean、Number和String，基本类型会在栈内存中被分配，如果出现此类基本类型引用如：<br>var a = 10, b = a;那么会在栈内存中复制一个值，给b,所以如果我们这样，b = 20;结果就是a = 10;b = 20;了。<br>如果是引用类型，对象会在堆内存中被创建，而栈内存中仅仅是一个指向栈内存的地址，如var a = {source:1}, b = a;b.source = 2;此时a.source 也会随之改变。因为改变的只有堆内存的对象，而栈上的地址并没有改变。<br>现在可以说明深浅复制的关系了，浅复制仅仅是循环复制，如果遇到对象，也是引用传递，也就是复制与被复制的对象改变的话，source与target对象都会改变。<br>深复制是递归下去，直到不存引用传递，全部是值传递。也就是source与target完全是两个独立的对象。<br>下面代码分析如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * extend zepto的深浅复制</div><div class="line"> * $.extend 的核心其实是后面的extend函数</div><div class="line"> * $.extend为了保持与jquery api的一致，做了这样一个封装函数</div><div class="line"> */</div><div class="line">$.extend = <span class="function"><span class="keyword">function</span><span class="params">(target)</span>{</span></div><div class="line"><span class="comment">//对arguments进行处理，args变量为从第二个参数开始含第二个参数的数组。</span></div><div class="line"><span class="keyword">var</span> deep, args = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>)</div><div class="line"><span class="comment">//判断第一个参数是否是一个boolean类型，如果是boolean类型，则赋值给deep，true的话，会进行深度复制。</span></div><div class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> target == <span class="string">'boolean'</span>) {</div><div class="line">  deep = target</div><div class="line">  <span class="comment">//因为第一个参数已经是boolean了，所以真正的target应该是第二个参数，需要复制的参数也顺延到第三个参数以后。</span></div><div class="line">  <span class="comment">//所以shift返回被删除的第二个参数，args数组，也从第三个参数开始。</span></div><div class="line">  target = args.shift()</div><div class="line">}</div><div class="line"><span class="comment">//循环复制args数组中的每个对象</span></div><div class="line">args.forEach(<span class="function"><span class="keyword">function</span><span class="params">(arg)</span>{</span> extend(target, arg, deep) })</div><div class="line"><span class="comment">//返回目标对象</span></div><div class="line"><span class="keyword">return</span> target</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * </div><div class="line"> * @param  target 目标对象</div><div class="line"> * @param  source 源对象</div><div class="line"> * @param  deep   是否深度复制 true为深复制</div><div class="line"> * @return        返回目标对象</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span><span class="params">(target, source, deep)</span> {</span></div><div class="line"><span class="comment">//循环操作source中的属性</span></div><div class="line"><span class="keyword">for</span> (key <span class="keyword">in</span> source)</div><div class="line">  <span class="comment">//判断下是否是深复制，是否是object和数组，其他的类型不需要深复制</span></div><div class="line">  <span class="keyword">if</span> (deep && (isPlainObject(source[key]) || isArray(source[key]))) {</div><div class="line">  	<span class="comment">//这里source如果是对象，target不是，需要将target赋值为对象</span></div><div class="line">    <span class="keyword">if</span> (isPlainObject(source[key]) && !isPlainObject(target[key]))</div><div class="line">      target[key] = {}</div><div class="line">    <span class="comment">//这里source如果是数组，target不是，需要将target赋值为数组</span></div><div class="line">    <span class="keyword">if</span> (isArray(source[key]) && !isArray(target[key]))</div><div class="line">      target[key] = []</div><div class="line">    <span class="comment">//递归复制  </span></div><div class="line">    extend(target[key], source[key], deep)</div><div class="line">  }</div><div class="line">  <span class="comment">//非深复制，则直接复制</span></div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (source[key] !== <span class="literal">undefined</span>) target[key] = source[key]</div><div class="line">}</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.fenghongyu.com/2014/12/03/zepto1.1.4-Zepto-fn/" data-id="cehl1hq26n5wmzjr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zepto/">zepto</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-zepto1.1.4-Zepto-commonfunc" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2014/12/02/zepto1.1.4-Zepto-commonfunc/" class="article-date">
@@ -85,7 +173,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.fenghongyu.com/2014/12/02/zepto1.1.4-Zepto-commonfunc/" data-id="w7j7yzysg4w86o3r" class="article-share-link">Share</a>
+      <a data-url="http://www.fenghongyu.com/2014/12/02/zepto1.1.4-Zepto-commonfunc/" data-id="ubagb1hbua2a1oaf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -125,7 +213,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.fenghongyu.com/2014/12/01/zepto1.1.4-Zepto-common-var/" data-id="5p698cxje0qdytbr" class="article-share-link">Share</a>
+      <a data-url="http://www.fenghongyu.com/2014/12/01/zepto1.1.4-Zepto-common-var/" data-id="9q4hcfttg2ws3jpv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zepto/">zepto</a></li></ul>
@@ -148,7 +236,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/zepto/">zepto</a><span class="tag-list-count">2</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/zepto/">zepto</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -166,7 +254,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11">十一月 2014</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12">十二月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11">十一月 2014</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -176,6 +264,14 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2014/12/04/zepto1.1.4-Zepto-fn-1/">zepto1.1.4源码分析 zepto部分 fn</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/03/zepto1.1.4-Zepto-fn/">zepto1.1.4源码分析 zepto部分 fn</a>
+          </li>
         
           <li>
             <a href="/2014/12/02/zepto1.1.4-Zepto-commonfunc/">(no title)</a>
