@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="zepto.js"></script>
+		<script src="touch.js"></script>
+		<script src="event.js"></script>
+		<style>
+			.tap {
+				width: 200px;
+				height: 200px;
+				position: absolute;
+				z-index: 2;
+				top: 0px;
+				left: 0px;
+				background-color: pink;
+			}
+			.click {
+				width: 300px;
+				height: 300px;
+				position: absolute;
+				z-index: 1;
+				top: 0px;
+				left: 0px;
+				background-color: blue;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="tap"></div>
+		<div class="click"></div>
+		<script>
+			$('.tap').on('tap', function() {
+				$(this).hide();
+				alert('tap');
+			})
+			$('.click').on('click', function() {
+				alert('click');
+			})
+		</script>
+	</body>
+</html>
