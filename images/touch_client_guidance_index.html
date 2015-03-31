@@ -10,7 +10,7 @@
 	<script type="text/javascript">
 		(function(window) {
 			alert(location.href);
-			window.history.pushState({},'这是一个测试','&bd_source=oppo');
+			window.history.pushState({},'这是一个测试',location.href + '&bd_source=oppo');
 			alert(location.href);
 		})(window);
 
