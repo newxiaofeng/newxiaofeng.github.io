@@ -28,20 +28,28 @@
 		    text-indent: -999px;
 		    background-repeat: no-repeat;
 		}
+		.content {
+			margin: 0 auto;
+    		width: 700px;
+		}
 		#scene {
 			color: #666;
 			text-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
     		font-family: 'Open Sans', Arial, sans-serif;
     		margin-top: 5%;
-		} 
-		.qr-code {
-			float: right;
+    		padding: 0px;
 		}
+		li {
+			list-style: none;
+			text-align: center;
+		}
+		.layer {
+			position: absolute;
+		} 
 		.box {
 			background-color: rgba(105, 112, 9, 0.2);
-			width: 600px;
-		    height: 300px;
-		    padding: 40px 60px;
+			width: 700px;
+		    height: 400px;
 		    border: 1px solid rgba(0, 0, 0, 0.3);
 		    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     		font-size: 30px;
@@ -50,18 +58,19 @@
 		    margin: 0 auto;
 		}
 		.maintain {
-			width: 600px;
+		    width: 700px;
+    		height: 150px;
 			display: block;
 			margin: 0 auto;
 			text-align: center;
 			font-size: 56px;
-			margin-top: 100px;
+			margin-top: 80px;
 		}
 		.description {
-			width: 400px;
+			width: 700px;
 			height: 200px;
 			margin: 0 auto;
-			margin-top: 200px;
+			margin-top: 250px;
 			font-size: 24px;
 			text-align: center;
 			/*color: rgba(224,59,59,0.8);*/
@@ -94,16 +103,16 @@
 	</div>
 	<div class="content">
 		<ul id="scene">
-			<li class="layer" data-depth="0.40">
+			<li class="layer" data-depth="0.20">
 				<div class="box"></div>
 			</li>
-			<li class="layer" data-depth="0.20">
+			<li class="layer" data-depth="0.40">
 				<!-- <img class="maintain" src=""> -->
 				<h1 class="maintain">
 					页面维护中
 				</h1>
 			</li>
-			<li class="layer" data-depth="0.40">
+			<li class="layer" data-depth="0.60">
 				<div class="description">
 					头条君正在努力抢救页面。。
 				</div>
